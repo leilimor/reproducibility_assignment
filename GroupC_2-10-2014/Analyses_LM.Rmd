@@ -1,0 +1,352 @@
+---
+title: "Reproducibility Assign: Group C"
+author: "Leili Mortazavi"
+date: '2019-11-03'
+output:
+  html_document: default
+collapsed: no
+toc: yes
+toc_depth: 3
+toc_float: null
+---
+
+#Setting up
+
+```{r importing data}
+library(haven)
+data <- read_sav("data/Study1_Data.sav")
+View(data)
+```
+
+
+```{r inspecting the data}
+colnames(data)
+```
+
+
+```{r checking number of participants}
+data
+```
+
+The number of rows here (135) is consistent with the number of participants at T1 reported in the paper. 
+
+Now let's see if the number of participants who completed T2 is also consistent with what is reported in the paper (106).
+
+
+```{r excluding only those who did not finish T2}
+data_complete <- data %>% subset(T2_Finished == 1)
+data_complete
+```
+
+Yes! The number of rows here after excluding those who didn't finish T2 is also 106. 
+
+
+#Descriptive stats
+
+##T1
+
+###Curiosity
+
+```{r T1 curiosity}
+mean_T1_curious <- mean(data_complete$T1_Curious)
+#ci is from the package gmodels
+ci_T1_curious <- ci(data_complete$T1_Curious, confidence = 0.95)
+T1_curiosity <- c(round(c(mean_T1_curious, ci_T1_curious[2], ci_T1_curious[3]), digits = 2))
+T1_curiosity
+```
+
+These values are consistent with the paper. 
+
+###Surprise
+
+```{r T1 Surprise}
+mean_T1_Surprise <- mean(data_complete$T1_Surprised)
+#ci is from the package gmodels
+ci_T1_Surprise <- ci(data_complete$T1_Surprised, confidence = 0.95)
+T1_Surprise <- c(round(c(mean_T1_Surprise, ci_T1_Surprise[2], ci_T1_Surprise[3]), digits = 2))
+T1_Surprise
+```
+
+
+These values are consistent with the paper.
+
+###Meaningfulness
+
+```{r T1 meaningfulness}
+mean_T1_meaningfulness <- mean(data_complete$T1_Meaningful)
+#ci is from the package gmodels
+ci_T1_meaningfulness <- ci(data_complete$T1_Meaningful, confidence = 0.95)
+T1_meaningfulness <- c(round(c(mean_T1_meaningfulness, ci_T1_meaningfulness[2], ci_T1_meaningfulness[3]), digits = 2))
+T1_meaningfulness
+```
+
+
+These values are consistent with the paper.
+
+
+
+###Interest
+
+```{r T1 interest}
+mean_T1_interest <- mean(data_complete$T1_Interesting)
+#ci is from the package gmodels
+ci_T1_interest <- ci(data_complete$T1_Interesting, confidence = 0.95)
+T1_interest <- c(round(c(mean_T1_interest, ci_T1_interest[2], ci_T1_interest[3]), digits = 2))
+T1_interest
+```
+
+
+These values are consistent with the paper.
+
+
+###Interest (composite)
+
+```{r T1 composite interest}
+mean_T1_interest_comp <- mean(data_complete$T1_Interest_Composite)
+#ci is from the package gmodels
+ci_T1_interest_comp <- ci(data_complete$T1_Interest_Composite, confidence = 0.95)
+T1_interest_comp <- c(round(c(mean_T1_interest_comp, ci_T1_interest_comp[2], ci_T1_interest_comp[3]), digits = 2))
+T1_interest_comp
+```
+
+
+These values are consistent with the paper.
+
+##T2
+
+###Curiosity
+
+```{r T2 curiosity}
+mean_T2_curious <- mean(data_complete$T2_Curious)
+#ci is from the package gmodels
+ci_T2_curious <- ci(data_complete$T2_Curious, confidence = 0.95)
+T2_curiosity <- c(round(c(mean_T2_curious, ci_T2_curious[2], ci_T2_curious[3]), digits = 2))
+T2_curiosity
+```
+
+These values are consistent with the paper. 
+
+###Surprise
+
+```{r T2 Surprise}
+mean_T2_Surprise <- mean(data_complete$T2_Surprised)
+#ci is from the package gmodels
+ci_T2_Surprise <- ci(data_complete$T2_Surprised, confidence = 0.95)
+T2_Surprise <- c(round(c(mean_T2_Surprise, ci_T2_Surprise[2], ci_T2_Surprise[3]), digits = 2))
+T2_Surprise
+```
+
+
+These values are consistent with the paper.
+
+###Meaningfulness
+
+```{r T2 meaningfulness}
+mean_T2_meaningfulness <- mean(data_complete$T2_Meaningful)
+#ci is from the package gmodels
+ci_T2_meaningfulness <- ci(data_complete$T2_Meaningful, confidence = 0.95)
+T2_meaningfulness <- c(round(c(mean_T2_meaningfulness, ci_T2_meaningfulness[2], ci_T2_meaningfulness[3]), digits = 2))
+T2_meaningfulness
+```
+
+
+These values are consistent with the paper.
+
+
+
+###Interest
+
+```{r T2 interest}
+mean_T2_interest <- mean(data_complete$T2_Interesting)
+#ci is from the package gmodels
+ci_T2_interest <- ci(data_complete$T2_Interesting, confidence = 0.95)
+T2_interest <- c(round(c(mean_T2_interest, ci_T2_interest[2], ci_T2_interest[3]), digits = 2))
+T2_interest
+```
+
+
+These values are consistent with the paper.
+
+
+###Interest (composite)
+
+```{r T2 composite interest}
+mean_T2_interest_comp <- mean(data_complete$T2_Interest_Composite)
+#ci is from the package gmodels
+ci_T2_interest_comp <- ci(data_complete$T2_Interest_Composite, confidence = 0.95)
+T2_interest_comp <- c(round(c(mean_T2_interest_comp, ci_T2_interest_comp[2], ci_T2_interest_comp[3]), digits = 2))
+T2_interest_comp
+```
+
+
+These values are consistent with the paper.
+
+##T2 - T2
+
+```{r}
+
+```
+
+
+
+###Curiosity
+
+```{r T2 - T1 curiosity}
+mean_curious_diff <- mean(data_complete$Curious_diff)
+#ci is from the package gmodels
+ci_curious_diff <- ci(data_complete$Curious_diff, confidence = 0.95)
+curiosity_diff <- c(round(c(mean_curious_diff, ci_curious_diff[2], ci_curious_diff[3]), digits = 2))
+curiosity_diff
+```
+
+These values are consistent with the paper. 
+
+###Surprise
+
+Since there's no column for Surprise_diff, Meaningful_diff, and Interest_diff, I'll make those below:
+
+```{r adding diff columns}
+data_complete <- data_complete %>% 
+  mutate(Surprised_diff = T2_Surprised - T1_Surprised, 
+         Meaningful_diff = T2_Meaningful - T1_Meaningful, 
+         Interesting_diff = T2_Interesting - T1_Interesting)
+```
+
+
+```{r T2 - T1 Surprise}
+ci_Surprise_diff <- ci(data_complete$Surprised_diff, confidence = 0.95)
+surprise_diff <- c(round(c(mean(data_complete$Surprise_diff), ci_Surprise_diff[2], ci_Surprise_diff[3]), digits = 2))
+surprise_diff
+```
+
+
+These values are consistent with the paper.
+
+###Meaningfulness
+
+```{r T2 - T1 meaningfulness}
+ci_meaning_diff <- ci(data_complete$Meaningful_diff, confidence = 0.95)
+meaning_diff <- c(round(c(mean(data_complete$Meaningful_diff), ci_meaning_diff[2], ci_meaning_diff[3]), digits = 2))
+meaning_diff
+```
+
+
+These values are consistent with the paper.
+
+
+
+###Interest
+
+```{r T2 - T1 interest}
+ci_interest_diff <- ci(data_complete$Interesting_diff, confidence = 0.95)
+interest_diff <- c(round(c(mean(data_complete$Interesting_diff), ci_interest_diff[2], ci_interest_diff[3]), digits = 2))
+interest_diff
+```
+
+
+These values are consistent with the paper.
+
+
+###Interest (composite)
+
+```{r T2 - T1 interest composite}
+ci_interest_comp_diff <- ci(data_complete$Interest_composite_diff, confidence = 0.95)
+interest_comp_diff <- c(round(c(mean(data_complete$Interest_composite_diff), ci_interest_comp_diff[2], ci_interest_comp_diff[3]), digits = 2))
+interest_comp_diff
+```
+
+
+These values are consistent with the paper.
+
+
+#Inferential stats
+
+##Curiosity
+
+```{r t-test curiosity}
+t_curiosity <- t.test(data_complete$T2_Curious, y = data_complete$T1_Curious, paired = TRUE)
+t_curiosity
+p_curiosity <- t_curiosity[3] 
+```
+
+Results are consistent with the paper. 
+
+```{r effect size curiosity}
+d_curious <- (mean_T2_curious - mean_T1_curious)/sd(c(data_complete$T2_Curious, data_complete$T1_Curious)) 
+d_curious
+```
+
+Results are consistent with the paper.
+
+##Surprise
+
+```{r t-test surprise}
+t_surprise <- t.test(data_complete$T2_Surprised, y = data_complete$T1_Surprised, paired = TRUE)
+t_surprise
+p_surprise <- t_surprise[3]
+```
+
+##Meaningfulness
+
+```{r t-test meaning}
+t_meaning <- t.test(data_complete$T2_Meaningful, y = data_complete$T1_Meaningful, paired = TRUE)
+t_meaning
+p_meaning <- t_meaning[3]
+```
+
+Results are consistent with the paper. 
+
+##Interest
+
+```{r t-test interest}
+t_interest <- t.test(data_complete$T2_Interesting, y = data_complete$T1_Interesting, paired = TRUE)
+p_interest <- t_interest[3]
+t_interest
+```
+
+Results are consistent with the paper. 
+
+##Interest (composite)
+
+```{r t-test interest composite}
+t_interest_comp <- t.test(data_complete$T2_Interest_Composite, y = data_complete$T1_Interest_Composite, paired = TRUE)
+p_interest_comp <- t_interest_comp[3]
+t_interest_comp
+```
+
+Results are consistent with the paper. 
+
+```{r effect size interest composite}
+d_interest <- (mean_T2_interest_comp - mean_T1_interest_comp)/sd(c(data_complete$T2_Interest_Composite, data_complete$T1_Interest_Composite)) 
+d_interest
+```
+
+Seems like the paper always rounds up to 2 digits, but here they report d = 0.29, which is not rounding up that would have returned d = 0.30.
+
+
+#Making a table similar to Table 1
+
+"Time 1 95% CI (lower)", "Time 1 95% CI (higher)"
+```{r table 1}
+table1 <- matrix(
+  c(T1_curiosity, T2_curiosity, curiosity_diff, p_curiosity, 
+    T1_interest_comp, T2_interest_comp, interest_comp_diff, p_interest_comp,
+    T1_Surprise, T2_Surprise, surprise_diff, p_surprise,
+    T1_meaningfulness, T2_meaningfulness, meaning_diff, p_meaning,
+    T1_interest, T2_interest, interest_diff, p_interest), 
+  ncol = 10)
+
+colnames(table1) <- c("Time 1 mean", "Time 1 95% CI (lower)", "Time 1 95% CI (higher)", "Time 2 mean", "Time 2 95% CI (lower)", "Time 2 95% CI (higher)", "Underestimate", "Underestimate 95% CI (lower)", "Underestimate 95% CI (higher)", "p")
+rownames(table1) <- c("Curiosity", "Interest (composite)", "Surprise", "Meaningfulness", "Interest")
+table1 
+```
+
+
+```{r making table 1 pretty}
+library(formattable)
+formattable(table1)
+formattable(table1, align = c("l", rep("r", NCOL(table1) - 1)))
+View(table1)
+```
+
+
