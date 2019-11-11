@@ -12,13 +12,13 @@ output:
 
 ```{r}
 articleID <- "2-10-2014" #insert the article ID code here e.g., "10-3-2015"
-reportType <- "pilot" #specify whether this is the 'pilot' report or 'copilot' report
+reportType <- "copilot" #specify whether this is the 'pilot' report or 'copilot' report
 pilotNames <- "Leili Mortazavi" #insert the pilot's name here e.g., "Tom Hardwicke".
 copilotNames <- "Lily Steyer" #insert the co-pilot's name here e.g., "Michael Frank".
 pilotTTC <- 240 #insert the pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
-copilotTTC <- NA #insert the co-pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
+copilotTTC <- 140 #insert the co-pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
 pilotStartDate <- "11/03/19" #insert the piloting start date in US format e.g., as.Date("01/25/18", format = "%m/%d/%y")
-copilotStartDate <- NA #insert the co-piloting start date in US format e.g., as.Date("01/25/18", format = "%m/%d/%y")
+copilotStartDate <- "11/10/19" #insert the co-piloting start date in US format e.g., as.Date("01/25/18", format = "%m/%d/%y")
 completionDate <- "11/10/19" #insert the date of final report completion in US format e.g., as.Date("01/25/18", format = "%m/%d/%y")
 ```
 
@@ -50,14 +50,12 @@ Make sure to use the original article for additional context and information abo
 
 ------
 
-
 ```{r global_options, include=FALSE}
 # sets up some formatting options for the R Markdown document
 knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
 # Step 1: Load packages and prepare report object
-
 
 ```{r}
 # load packages
@@ -87,7 +85,6 @@ data <- read_sav("data/Study1_Data.sav")
 colnames(data)
 ```
 
-
 ```{r checking number of participants}
 n_T1 <- length(data$Order)
 reportObject <- reproCheck(reportedValue = "135", obtainedValue = n_T1, valueType = "n")
@@ -110,15 +107,20 @@ The data is not in 'long' format but is clear and easy to work with as.
 I believe, the wide format is useful for this particular dataset. 
 
 
+*Co-pilot note: It might be helpful to point out that the original "Order" column contains participants' ID #s, since that column name isn't very intuitive. I'm also not sure if it's necessary to include the Age, Gender, or Year_born columns in the tidied dataframe, since those variables were not ultimately used in the analysis.*
+
+*Co-pilot note: Data is still not in traditional tidy format. The lack of tidy data did not prove to be a major issue, however, since the pilot successfully carried out all analyses using wide data. If someone was seeking to tidy the data for future analyses, a 'gather' function would be very useful.*
+
 # Step 4: Run analysis
 
 ## Pre-processing
 
 ```{r excluding only those who did not finish time2}
-data_complete <- data %>% subset(T2_Finished == 1)
-data_complete
+# data_complete <- data %>% subset(T2_Finished == 1)
+# data_complete
 ```
 
+*Co-pilot note: I think we can remove this pre-processing step, since it was already done above.* 
 
 ## Descriptive statistics
 
@@ -129,12 +131,14 @@ data_complete
 ```{r T1 curiosity}
 mean_T1_curious <- mean(data_complete$T1_Curious)
 #ci is from the package gmodels
-library(gmodels)
 ci_T1_curious <- ci(data_complete$T1_Curious, confidence = 0.95)
 T1_curiosity <- c(round(c(mean_T1_curious, ci_T1_curious[2], ci_T1_curious[3]), digits = 2))
 T1_curiosity
 
-reportObject <- reproCheck(reportedValue = "3.99", obtainedValue = mean_T1_curious, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.99', obtainedValue = T1_curiosity[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.74', obtainedValue = T1_curiosity[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.24', obtainedValue = T1_curiosity[3], valueType = 'ci')
 ```
 
 These values are consistent with the paper. 
@@ -148,7 +152,10 @@ ci_T1_Surprise <- ci(data_complete$T1_Surprised, confidence = 0.95)
 T1_Surprise <- c(round(c(mean_T1_Surprise, ci_T1_Surprise[2], ci_T1_Surprise[3]), digits = 2))
 T1_Surprise
 
-reportObject <- reproCheck(reportedValue = "2.84", obtainedValue = mean_T1_Surprise, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '2.84', obtainedValue = T1_Surprise[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '2.64', obtainedValue = T1_Surprise[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '3.05', obtainedValue = T1_Surprise[3], valueType = 'ci')
 ```
 
 These values are consistent with the paper.
@@ -162,13 +169,13 @@ ci_T1_meaningfulness <- ci(data_complete$T1_Meaningful, confidence = 0.95)
 T1_meaningfulness <- c(round(c(mean_T1_meaningfulness, ci_T1_meaningfulness[2], ci_T1_meaningfulness[3]), digits = 2))
 T1_meaningfulness
 
-reportObject <- reproCheck(reportedValue = "3.81", obtainedValue = mean_T1_meaningfulness, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.81', obtainedValue = T1_meaningfulness[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.60', obtainedValue = T1_meaningfulness[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.03', obtainedValue = T1_meaningfulness[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
-
 
 ***Interest***
 
@@ -179,12 +186,13 @@ ci_T1_interest <- ci(data_complete$T1_Interesting, confidence = 0.95)
 T1_interest <- c(round(c(mean_T1_interest, ci_T1_interest[2], ci_T1_interest[3]), digits = 2))
 T1_interest
 
-reportObject <- reproCheck(reportedValue = "3.95", obtainedValue = mean_T1_interest, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.95', obtainedValue = T1_interest[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.73', obtainedValue = T1_interest[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.18', obtainedValue = T1_interest[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
 
 ***Interest (composite)***
 
@@ -195,9 +203,11 @@ ci_T1_interest_comp <- ci(data_complete$T1_Interest_Composite, confidence = 0.95
 T1_interest_comp <- c(round(c(mean_T1_interest_comp, ci_T1_interest_comp[2], ci_T1_interest_comp[3]), digits = 2))
 T1_interest_comp
 
-reportObject <- reproCheck(reportedValue = "3.54", obtainedValue = mean_T1_interest_comp, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.54', obtainedValue = T1_interest_comp[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.34', obtainedValue = T1_interest_comp[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '3.73', obtainedValue = T1_interest_comp[3], valueType = 'ci')
 ```
-
 
 These values are consistent with the paper.
 
@@ -212,7 +222,10 @@ ci_T2_curious <- ci(data_complete$T2_Curious, confidence = 0.95)
 T2_curiosity <- c(round(c(mean_T2_curious, ci_T2_curious[2], ci_T2_curious[3]), digits = 2))
 T2_curiosity
 
-reportObject <- reproCheck(reportedValue = "4.34", obtainedValue = mean_T2_curious, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '4.34', obtainedValue = T2_curiosity[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '4.10', obtainedValue = T2_curiosity[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.58', obtainedValue = T2_curiosity[3], valueType = 'ci')
 ```
 
 These values are consistent with the paper. 
@@ -226,9 +239,11 @@ ci_T2_Surprise <- ci(data_complete$T2_Surprised, confidence = 0.95)
 T2_Surprise <- c(round(c(mean_T2_Surprise, ci_T2_Surprise[2], ci_T2_Surprise[3]), digits = 2))
 T2_Surprise
 
-reportObject <- reproCheck(reportedValue = "3.25", obtainedValue = mean_T2_Surprise, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.25', obtainedValue = T2_Surprise[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.06', obtainedValue = T2_Surprise[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '3.44', obtainedValue = T2_Surprise[3], valueType = 'ci')
 ```
-
 
 These values are consistent with the paper.
 
@@ -241,13 +256,13 @@ ci_T2_meaningfulness <- ci(data_complete$T2_Meaningful, confidence = 0.95)
 T2_meaningfulness <- c(round(c(mean_T2_meaningfulness, ci_T2_meaningfulness[2], ci_T2_meaningfulness[3]), digits = 2))
 T2_meaningfulness
 
-reportObject <- reproCheck(reportedValue = "4.04", obtainedValue = mean_T2_meaningfulness, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '4.04', obtainedValue = T2_meaningfulness[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.84', obtainedValue = T2_meaningfulness[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.23', obtainedValue = T2_meaningfulness[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
-
 
 ***Interest***
 
@@ -258,12 +273,13 @@ ci_T2_interest <- ci(data_complete$T2_Interesting, confidence = 0.95)
 T2_interest <- c(round(c(mean_T2_interest, ci_T2_interest[2], ci_T2_interest[3]), digits = 2))
 T2_interest
 
-reportObject <- reproCheck(reportedValue = "4.19", obtainedValue = mean_T2_interest, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '4.19', obtainedValue = T2_interest[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '4.00', obtainedValue = T2_interest[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.38', obtainedValue = T2_interest[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
 
 ***Interest (composite)***
 
@@ -274,13 +290,15 @@ ci_T2_interest_comp <- ci(data_complete$T2_Interest_Composite, confidence = 0.95
 T2_interest_comp <- c(round(c(mean_T2_interest_comp, ci_T2_interest_comp[2], ci_T2_interest_comp[3]), digits = 2))
 T2_interest_comp
 
-reportObject <- reproCheck(reportedValue = "3.82", obtainedValue = mean_T2_interest_comp, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '3.82', obtainedValue = T2_interest_comp[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '3.65', obtainedValue = T2_interest_comp[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '4.00', obtainedValue = T2_interest_comp[3], valueType = 'ci')
 ```
-
 
 These values are consistent with the paper.
 
-###T2 - T2
+###T2 - T1
 
 ***Curiosity***
 
@@ -291,7 +309,10 @@ ci_curious_diff <- ci(data_complete$Curious_diff, confidence = 0.95)
 curiosity_diff <- c(round(c(mean_curious_diff, ci_curious_diff[2], ci_curious_diff[3]), digits = 2))
 curiosity_diff
 
-reportObject <- reproCheck(reportedValue = "0.35", obtainedValue = mean_curious_diff, valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.35', obtainedValue = curiosity_diff[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '0.11', obtainedValue = curiosity_diff[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '0.59', obtainedValue = curiosity_diff[3], valueType = 'ci')
 ```
 
 These values are consistent with the paper. 
@@ -309,13 +330,15 @@ data_complete <- data_complete %>%
 
 
 ```{r T2 - T1 Surprise}
-ci_Surprise_diff <- ci(data_complete$Surprised_diff, confidence = 0.95)
-surprise_diff <- c(round(c(mean(data_complete$Surprised_diff), ci_Surprise_diff[2], ci_Surprise_diff[3]), digits = 2))
+ci_Surprised_diff <- ci(data_complete$Surprised_diff, confidence = 0.95)
+surprise_diff <- c(round(c(mean(data_complete$Surprised_diff), ci_Surprised_diff[2], ci_Surprised_diff[3]), digits = 2))
 surprise_diff
 
-reportObject <- reproCheck(reportedValue = "0.40", obtainedValue = mean(data_complete$Surprised_diff), valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.40', obtainedValue = surprise_diff[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '0.19', obtainedValue = surprise_diff[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '0.62', obtainedValue = surprise_diff[3], valueType = 'ci')
 ```
-
 
 These values are consistent with the paper.
 
@@ -326,13 +349,13 @@ ci_meaning_diff <- ci(data_complete$Meaningful_diff, confidence = 0.95)
 meaning_diff <- c(round(c(mean(data_complete$Meaningful_diff), ci_meaning_diff[2], ci_meaning_diff[3]), digits = 2))
 meaning_diff
 
-reportObject <- reproCheck(reportedValue = "0.22", obtainedValue = mean(data_complete$Meaningful_diff), valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.22', obtainedValue = meaning_diff[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '0.03', obtainedValue = meaning_diff[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '0.42', obtainedValue = meaning_diff[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
-
 
 ***Interest***
 
@@ -341,12 +364,13 @@ ci_interest_diff <- ci(data_complete$Interesting_diff, confidence = 0.95)
 interest_diff <- c(round(c(mean(data_complete$Interesting_diff), ci_interest_diff[2], ci_interest_diff[3]), digits = 2))
 interest_diff
 
-reportObject <- reproCheck(reportedValue = "0.23", obtainedValue = mean(data_complete$Interesting_diff), valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.23', obtainedValue = interest_diff[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '0.02', obtainedValue = interest_diff[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '0.45', obtainedValue = interest_diff[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
 
 ***Interest (composite)***
 
@@ -355,23 +379,31 @@ ci_interest_comp_diff <- ci(data_complete$Interest_composite_diff, confidence = 
 interest_comp_diff <- c(round(c(mean(data_complete$Interest_composite_diff), ci_interest_comp_diff[2], ci_interest_comp_diff[3]), digits = 2))
 interest_comp_diff
 
-reportObject <- reproCheck(reportedValue = "0.29", obtainedValue = mean(data_complete$Interest_composite_diff), valueType = "mean")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.29', obtainedValue = interest_comp_diff[1], valueType = 'mean')
+reportObject <- reproCheck(reportedValue = '0.10', obtainedValue = interest_comp_diff[2], valueType = 'ci')
+reportObject <- reproCheck(reportedValue = '0.47', obtainedValue = interest_comp_diff[3], valueType = 'ci')
 ```
 
-
 These values are consistent with the paper.
-
 
 ##Inferential stats
 
 ###Curiosity
+
+*Co-pilot note: Quoting section of Target Outcomes that this portion of the Markdown file seeks to reproduce:*
+
+> Participants' Time 1 predictions of their curiosity (M = 3.99, SD = 1.32) were lower than their actual curiosity ratings at Time 2, immediately before reading their responses (M = 4.34, SD = 1.25), t(105) = 2.88, p = .005, d = 0.27.
 
 ```{r t-test curiosity}
 t_curiosity <- t.test(data_complete$T2_Curious, y = data_complete$T1_Curious, paired = TRUE)
 t_curiosity
 p_curiosity <- t_curiosity[3] 
 
-reportObject <- reproCheck(reportedValue = "0.005", obtainedValue = p_curiosity, valueType = "p")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.005', obtainedValue = p_curiosity, valueType = 'p')
+reportObject <- reproCheck(reportedValue = '2.88', obtainedValue = t_curiosity[1], valueType = 't')
+reportObject <- reproCheck(reportedValue = '0.35', obtainedValue = t_curiosity[5], valueType = 'mean')
 ```
 
 Results are consistent with the paper. 
@@ -379,22 +411,28 @@ Results are consistent with the paper.
 ```{r effect size curiosity}
 d_curious <- (mean_T2_curious - mean_T1_curious)/sd(c(data_complete$T2_Curious, data_complete$T1_Curious)) 
 d_curious
+
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.27', obtainedValue = d_curious, valueType = 'd')
 ```
 
 Results are consistent with the paper.
 
 ###Surprise
 
+*Co-pilot note: These analyses were not in the Target Outcomes, but it's great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.*
+
 ```{r t-test surprise}
 t_surprise <- t.test(data_complete$T2_Surprised, y = data_complete$T1_Surprised, paired = TRUE)
 t_surprise
 p_surprise <- t_surprise[3]
-p_surprise
 
 reportObject <- reproCheck(reportedValue = "<0.001", obtainedValue = "0.0003701906", valueType = "p", eyeballCheck = TRUE)
 ```
 
 ###Meaningfulness
+
+*Co-pilot note: These analyses were not in the Target Outcomes, but it's great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.*
 
 ```{r t-test meaning}
 t_meaning <- t.test(data_complete$T2_Meaningful, y = data_complete$T1_Meaningful, paired = TRUE)
@@ -408,6 +446,8 @@ Results are consistent with the paper.
 
 ###Interest
 
+*Co-pilot note: These analyses were not in the Target Outcomes, but it's great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.*
+
 ```{r t-test interest}
 t_interest <- t.test(data_complete$T2_Interesting, y = data_complete$T1_Interesting, paired = TRUE)
 p_interest <- t_interest[3]
@@ -420,12 +460,19 @@ Results are consistent with the paper.
 
 ###Interest (composite)
 
+*Co-pilot note: Quoting section of Target Outcomes that this portion of the Markdown file seeks to reproduce:*
+
+> Participants also underestimated how interesting they would find their responses. Predictions of interest at Time 1 (M = 3.54, SD = 1.01) were lower than ratings of actual interest experienced at Time 2 (M = 3.82, SD = 0.89), t(105) = 3.10, p = .003, d = 0.29.
+
 ```{r t-test interest composite}
 t_interest_comp <- t.test(data_complete$T2_Interest_Composite, y = data_complete$T1_Interest_Composite, paired = TRUE)
 p_interest_comp <- t_interest_comp[3]
 t_interest_comp
 
-reportObject <- reproCheck(reportedValue = "0.003", obtainedValue = p_interest_comp, valueType = "p")
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.003', obtainedValue = p_interest_comp, valueType = 'p')
+reportObject <- reproCheck(reportedValue = '3.10', obtainedValue = t_interest_comp[1], valueType = 't')
+reportObject <- reproCheck(reportedValue = '0.29', obtainedValue = t_interest_comp[5], valueType = 'mean')
 ```
 
 Results are consistent with the paper. 
@@ -433,14 +480,18 @@ Results are consistent with the paper.
 ```{r effect size interest composite}
 d_interest <- (mean_T2_interest_comp - mean_T1_interest_comp)/sd(c(data_complete$T2_Interest_Composite, data_complete$T1_Interest_Composite)) 
 d_interest
+
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject <- reproCheck(reportedValue = '0.29', obtainedValue = d_interest, valueType = 'd')
 ```
 
 Seems like the paper always rounds up to 2 digits, but here they report d = 0.29, which is not rounding up that would have returned d = 0.30.
 
+*Co-pilot note: I (and the ReproCheck) agree with the minor discrepancy that Leili notes above!*
 
 # Step 5: Conclusion
 
-All results were consistent with the reported findings in the paperexcept for a minor rounding error in effect size. Here's a table similar to Table 1 in the original paper:
+All results were consistent with the reported findings in the paper except for a minor rounding error in effect size. Here's a table similar to Table 1 in the original paper:
 
 "Time 1 95% CI (lower)", "Time 1 95% CI (higher)"
 ```{r table 1}

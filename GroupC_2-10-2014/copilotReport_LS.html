@@ -254,13 +254,13 @@ div.tocify {
 <div id="report-details" class="section level1">
 <h1>Report Details</h1>
 <pre class="r"><code>articleID &lt;- &quot;2-10-2014&quot; #insert the article ID code here e.g., &quot;10-3-2015&quot;
-reportType &lt;- &quot;pilot&quot; #specify whether this is the 'pilot' report or 'copilot' report
+reportType &lt;- &quot;copilot&quot; #specify whether this is the 'pilot' report or 'copilot' report
 pilotNames &lt;- &quot;Leili Mortazavi&quot; #insert the pilot's name here e.g., &quot;Tom Hardwicke&quot;.
 copilotNames &lt;- &quot;Lily Steyer&quot; #insert the co-pilot's name here e.g., &quot;Michael Frank&quot;.
 pilotTTC &lt;- 240 #insert the pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
-copilotTTC &lt;- NA #insert the co-pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
+copilotTTC &lt;- 140 #insert the co-pilot's estimated time to complete (in minutes, it is fine to approximate) e.g., 120
 pilotStartDate &lt;- &quot;11/03/19&quot; #insert the piloting start date in US format e.g., as.Date(&quot;01/25/18&quot;, format = &quot;%m/%d/%y&quot;)
-copilotStartDate &lt;- NA #insert the co-piloting start date in US format e.g., as.Date(&quot;01/25/18&quot;, format = &quot;%m/%d/%y&quot;)
+copilotStartDate &lt;- &quot;11/10/19&quot; #insert the co-piloting start date in US format e.g., as.Date(&quot;01/25/18&quot;, format = &quot;%m/%d/%y&quot;)
 completionDate &lt;- &quot;11/10/19&quot; #insert the date of final report completion in US format e.g., as.Date(&quot;01/25/18&quot;, format = &quot;%m/%d/%y&quot;)</code></pre>
 <hr />
 <div id="methods-summary" class="section level4">
@@ -368,76 +368,16 @@ reportObject &lt;- reproCheck(reportedValue = &quot;106&quot;, obtainedValue = n
 <div id="step-3-tidy-data" class="section level1">
 <h1>Step 3: Tidy data</h1>
 <p>The data is not in ‘long’ format but is clear and easy to work with as. I believe, the wide format is useful for this particular dataset.</p>
+<p><em>Co-pilot note: It might be helpful to point out that the original “Order” column contains participants’ ID #s, since that column name isn’t very intuitive. I’m also not sure if it’s necessary to include the Age, Gender, or Year_born columns in the tidied dataframe, since those variables were not ultimately used in the analysis.</em></p>
+<p><em>Co-pilot note: Data is still not in traditional tidy format. The lack of tidy data did not prove to be a major issue, however, since the pilot successfully carried out all analyses using wide data. If someone was seeking to tidy the data for future analyses, a ‘gather’ function would be very useful.</em></p>
 </div>
 <div id="step-4-run-analysis" class="section level1">
 <h1>Step 4: Run analysis</h1>
 <div id="pre-processing" class="section level2">
 <h2>Pre-processing</h2>
-<pre class="r"><code>data_complete &lt;- data %&gt;% subset(T2_Finished == 1)
-data_complete</code></pre>
-<pre><code>## # A tibble: 106 x 107
-##    T1_Roommate_Cur… T1_Roommate_Int… T1_Roommate_Sur… T1_Roommate_Mea…
-##           &lt;dbl+lbl&gt;        &lt;dbl+lbl&gt;        &lt;dbl+lbl&gt;        &lt;dbl+lbl&gt;
-##  1 NA               NA               NA               NA              
-##  2  4 [4-Somewhat]   3 [3]            2 [2]            4 [4-Somewhat] 
-##  3  2 [2]            3 [3]            3 [3]            2 [2]          
-##  4  3 [3]            2 [2]            3 [3]            1 [1-Not at al…
-##  5  2 [2]            1 [1-Not at al…  1 [1-Not at al…  2 [2]          
-##  6  3 [3]            3 [3]            3 [3]            3 [3]          
-##  7  1 [1-Not at al…  1 [1-Not at al…  1 [1-Not at al…  3 [3]          
-##  8  4 [4-Somewhat]   4 [4-Somewhat]   2 [2]            2 [2]          
-##  9  2 [2]            2 [2]            2 [2]            2 [2]          
-## 10  1 [1-Not at al…  1 [1-Not at al…  1 [1-Not at al…  1 [1-Not at al…
-## # … with 96 more rows, and 103 more variables:
-## #   T1_Social_Curious &lt;dbl+lbl&gt;, T1_Social_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Social_Surprised &lt;dbl+lbl&gt;, T1_Social_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Essay_Curious &lt;dbl+lbl&gt;, T1_Essay_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Essay_Surprised &lt;dbl+lbl&gt;, T1_Essay_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Convo_Curious &lt;dbl+lbl&gt;, T1_Convo_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Convo_Surprised &lt;dbl+lbl&gt;, T1_Convo_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Song_Curious &lt;dbl+lbl&gt;, T1_Song_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Song_Surprised &lt;dbl+lbl&gt;, T1_Song_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Finals_Curious &lt;dbl+lbl&gt;, T1_Finals_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Finals_Surprised &lt;dbl+lbl&gt;, T1_Finals_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Joke_Curious &lt;dbl+lbl&gt;, T1_Joke_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Joke_Surprised &lt;dbl+lbl&gt;, T1_Joke_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_Photo_Curious &lt;dbl+lbl&gt;, T1_Photo_Interesting &lt;dbl+lbl&gt;,
-## #   T1_Photo_Surprised &lt;dbl+lbl&gt;, T1_Photo_Meaningful &lt;dbl+lbl&gt;,
-## #   T1_FB_Curious &lt;dbl+lbl&gt;, T1_FB_Interesting &lt;dbl+lbl&gt;,
-## #   T1_FB_Surprised &lt;dbl+lbl&gt;, T1_FB_Meaningful &lt;dbl+lbl&gt;,
-## #   Gender &lt;dbl+lbl&gt;, Year_born &lt;dbl+lbl&gt;, Order &lt;dbl&gt;, T2_Finished &lt;dbl&gt;,
-## #   T2_Roommate_curious &lt;dbl+lbl&gt;, T2_Roommate_interesting &lt;dbl+lbl&gt;,
-## #   T2_Roommate_surprised &lt;dbl+lbl&gt;, T2_Roommate_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Social_curious &lt;dbl+lbl&gt;, T2_Social_interesting &lt;dbl+lbl&gt;,
-## #   T2_Social_surprised &lt;dbl+lbl&gt;, T2_Social_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Essay_curious &lt;dbl+lbl&gt;, T2_Essay_interesting &lt;dbl+lbl&gt;,
-## #   T2_Essay_surprised &lt;dbl+lbl&gt;, T2_Essay_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Convo_curious &lt;dbl+lbl&gt;, T2_Convo_interesting &lt;dbl+lbl&gt;,
-## #   T2_Convo_surprised &lt;dbl+lbl&gt;, T2_Convo_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Song_curious &lt;dbl+lbl&gt;, T2_Song_interesting &lt;dbl+lbl&gt;,
-## #   T2_Song_surprised &lt;dbl+lbl&gt;, T2_Song_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Finals_curious &lt;dbl+lbl&gt;, T2_Finals_interesting &lt;dbl+lbl&gt;,
-## #   T2_Finals_surprised &lt;dbl+lbl&gt;, T2_Finals_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Joke_curious &lt;dbl+lbl&gt;, T2_Joke_interesting &lt;dbl+lbl&gt;,
-## #   T2_Joke_surprised &lt;dbl+lbl&gt;, T2_Joke_meaningful &lt;dbl+lbl&gt;,
-## #   T2_Photo_curious &lt;dbl+lbl&gt;, T2_Photo_interesting &lt;dbl+lbl&gt;,
-## #   T2_Photo_surprised &lt;dbl+lbl&gt;, T2_Photo_meaningful &lt;dbl+lbl&gt;,
-## #   T2_FB_curious &lt;dbl+lbl&gt;, T2_FB_interesting &lt;dbl+lbl&gt;,
-## #   T2_FB_surprised &lt;dbl+lbl&gt;, T2_FB_meaningful &lt;dbl+lbl&gt;,
-## #   T1_Curious &lt;dbl&gt;, T1_Surprised &lt;dbl&gt;, T2_Curious &lt;dbl&gt;,
-## #   T2_Surprised &lt;dbl&gt;, T1_Meaningful &lt;dbl&gt;, T2_Meaningful &lt;dbl&gt;,
-## #   T1_Interesting &lt;dbl&gt;, T2_Interesting &lt;dbl&gt;, Age &lt;dbl&gt;,
-## #   T1_Roommate_Interest_composite &lt;dbl&gt;,
-## #   T1_Social_Interest_composite &lt;dbl&gt;, T1_Essay_Interest_composite &lt;dbl&gt;,
-## #   T1_Convo_Interest_composite &lt;dbl&gt;, T1_Song_Interest_composite &lt;dbl&gt;,
-## #   T1_Finals_Interest_composite &lt;dbl&gt;, T1_Joke_Interest_composite &lt;dbl&gt;,
-## #   T1_Photo_Interest_composite &lt;dbl&gt;, T1_FB_Interest_composite &lt;dbl&gt;,
-## #   T2_Roommate_Interest_composite &lt;dbl&gt;,
-## #   T2_Social_Interest_composite &lt;dbl&gt;, T2_Essay_Interest_composite &lt;dbl&gt;,
-## #   T2_Convo_Interest_composite &lt;dbl&gt;, T2_Song_Interest_composite &lt;dbl&gt;,
-## #   T2_Finals_Interest_composite &lt;dbl&gt;, T2_Joke_Interest_composite &lt;dbl&gt;,
-## #   T2_Photo_Interest_composite &lt;dbl&gt;, T2_FB_Interest_composite &lt;dbl&gt;,
-## #   T1_Interest_Composite &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code># data_complete &lt;- data %&gt;% subset(T2_Finished == 1)
+# data_complete</code></pre>
+<p><em>Co-pilot note: I think we can remove this pre-processing step, since it was already done above.</em></p>
 </div>
 <div id="descriptive-statistics" class="section level2">
 <h2>Descriptive statistics</h2>
@@ -446,14 +386,18 @@ data_complete</code></pre>
 <p><strong><em>Curiosity</em></strong></p>
 <pre class="r"><code>mean_T1_curious &lt;- mean(data_complete$T1_Curious)
 #ci is from the package gmodels
-library(gmodels)
 ci_T1_curious &lt;- ci(data_complete$T1_Curious, confidence = 0.95)
 T1_curiosity &lt;- c(round(c(mean_T1_curious, ci_T1_curious[2], ci_T1_curious[3]), digits = 2))
 T1_curiosity</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.99     3.74     4.24</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.99&quot;, obtainedValue = mean_T1_curious, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.99', obtainedValue = T1_curiosity[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.99) and the obtained value (3.99) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.74', obtainedValue = T1_curiosity[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.74) and the obtained value (3.74) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.24', obtainedValue = T1_curiosity[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.24) and the obtained value (4.24) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Surprise</em></strong></p>
 <pre class="r"><code>mean_T1_Surprise &lt;- mean(data_complete$T1_Surprised)
@@ -463,8 +407,13 @@ T1_Surprise &lt;- c(round(c(mean_T1_Surprise, ci_T1_Surprise[2], ci_T1_Surprise[
 T1_Surprise</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     2.84     2.64     3.05</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;2.84&quot;, obtainedValue = mean_T1_Surprise, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '2.84', obtainedValue = T1_Surprise[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (2.84) and the obtained value (2.84) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '2.64', obtainedValue = T1_Surprise[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (2.64) and the obtained value (2.64) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.05', obtainedValue = T1_Surprise[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.05) and the obtained value (3.05) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Meaningfulness</em></strong></p>
 <pre class="r"><code>mean_T1_meaningfulness &lt;- mean(data_complete$T1_Meaningful)
@@ -474,8 +423,13 @@ T1_meaningfulness &lt;- c(round(c(mean_T1_meaningfulness, ci_T1_meaningfulness[2
 T1_meaningfulness</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.81     3.60     4.03</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.81&quot;, obtainedValue = mean_T1_meaningfulness, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.81', obtainedValue = T1_meaningfulness[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.81) and the obtained value (3.81) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.60', obtainedValue = T1_meaningfulness[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.6) and the obtained value (3.6) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.03', obtainedValue = T1_meaningfulness[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.03) and the obtained value (4.03) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest</em></strong></p>
 <pre class="r"><code>mean_T1_interest &lt;- mean(data_complete$T1_Interesting)
@@ -485,8 +439,13 @@ T1_interest &lt;- c(round(c(mean_T1_interest, ci_T1_interest[2], ci_T1_interest[
 T1_interest</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.95     3.73     4.18</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.95&quot;, obtainedValue = mean_T1_interest, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.95', obtainedValue = T1_interest[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.95) and the obtained value (3.95) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.73', obtainedValue = T1_interest[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.73) and the obtained value (3.73) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.18', obtainedValue = T1_interest[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.18) and the obtained value (4.18) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest (composite)</em></strong></p>
 <pre class="r"><code>mean_T1_interest_comp &lt;- mean(data_complete$T1_Interest_Composite)
@@ -496,8 +455,13 @@ T1_interest_comp &lt;- c(round(c(mean_T1_interest_comp, ci_T1_interest_comp[2], 
 T1_interest_comp</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.54     3.34     3.73</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.54&quot;, obtainedValue = mean_T1_interest_comp, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.54', obtainedValue = T1_interest_comp[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.54) and the obtained value (3.54) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.34', obtainedValue = T1_interest_comp[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.34) and the obtained value (3.34) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.73', obtainedValue = T1_interest_comp[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.73) and the obtained value (3.73) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 </div>
 <div id="t2" class="section level3">
@@ -510,8 +474,13 @@ T2_curiosity &lt;- c(round(c(mean_T2_curious, ci_T2_curious[2], ci_T2_curious[3]
 T2_curiosity</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     4.34     4.10     4.58</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;4.34&quot;, obtainedValue = mean_T2_curious, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '4.34', obtainedValue = T2_curiosity[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (4.34) and the obtained value (4.34) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.10', obtainedValue = T2_curiosity[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.1) and the obtained value (4.1) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.58', obtainedValue = T2_curiosity[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.58) and the obtained value (4.58) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Surprise</em></strong></p>
 <pre class="r"><code>mean_T2_Surprise &lt;- mean(data_complete$T2_Surprised)
@@ -521,8 +490,13 @@ T2_Surprise &lt;- c(round(c(mean_T2_Surprise, ci_T2_Surprise[2], ci_T2_Surprise[
 T2_Surprise</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.25     3.06     3.44</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.25&quot;, obtainedValue = mean_T2_Surprise, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.25', obtainedValue = T2_Surprise[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.25) and the obtained value (3.25) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.06', obtainedValue = T2_Surprise[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.06) and the obtained value (3.06) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.44', obtainedValue = T2_Surprise[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.44) and the obtained value (3.44) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Meaningfulness</em></strong></p>
 <pre class="r"><code>mean_T2_meaningfulness &lt;- mean(data_complete$T2_Meaningful)
@@ -532,8 +506,13 @@ T2_meaningfulness &lt;- c(round(c(mean_T2_meaningfulness, ci_T2_meaningfulness[2
 T2_meaningfulness</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     4.04     3.84     4.23</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;4.04&quot;, obtainedValue = mean_T2_meaningfulness, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '4.04', obtainedValue = T2_meaningfulness[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (4.04) and the obtained value (4.04) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.84', obtainedValue = T2_meaningfulness[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.84) and the obtained value (3.84) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.23', obtainedValue = T2_meaningfulness[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.23) and the obtained value (4.23) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest</em></strong></p>
 <pre class="r"><code>mean_T2_interest &lt;- mean(data_complete$T2_Interesting)
@@ -543,8 +522,13 @@ T2_interest &lt;- c(round(c(mean_T2_interest, ci_T2_interest[2], ci_T2_interest[
 T2_interest</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     4.19     4.00     4.38</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;4.19&quot;, obtainedValue = mean_T2_interest, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '4.19', obtainedValue = T2_interest[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (4.19) and the obtained value (4.19) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.00', obtainedValue = T2_interest[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4) and the obtained value (4) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.38', obtainedValue = T2_interest[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4.38) and the obtained value (4.38) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest (composite)</em></strong></p>
 <pre class="r"><code>mean_T2_interest_comp &lt;- mean(data_complete$T2_Interest_Composite)
@@ -554,12 +538,17 @@ T2_interest_comp &lt;- c(round(c(mean_T2_interest_comp, ci_T2_interest_comp[2], 
 T2_interest_comp</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     3.82     3.65     4.00</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;3.82&quot;, obtainedValue = mean_T2_interest_comp, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '3.82', obtainedValue = T2_interest_comp[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (3.82) and the obtained value (3.82) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.65', obtainedValue = T2_interest_comp[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (3.65) and the obtained value (3.65) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '4.00', obtainedValue = T2_interest_comp[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (4) and the obtained value (4) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 </div>
-<div id="t2---t2" class="section level3">
-<h3>T2 - T2</h3>
+<div id="t2---t1" class="section level3">
+<h3>T2 - T1</h3>
 <p><strong><em>Curiosity</em></strong></p>
 <pre class="r"><code>mean_curious_diff &lt;- mean(data_complete$Curious_diff)
 #ci is from the package gmodels
@@ -568,8 +557,13 @@ curiosity_diff &lt;- c(round(c(mean_curious_diff, ci_curious_diff[2], ci_curious
 curiosity_diff</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     0.35     0.11     0.59</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.35&quot;, obtainedValue = mean_curious_diff, valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.35', obtainedValue = curiosity_diff[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (0.35) and the obtained value (0.35) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.11', obtainedValue = curiosity_diff[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.11) and the obtained value (0.11) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.59', obtainedValue = curiosity_diff[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.59) and the obtained value (0.59) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Surprise</em></strong></p>
 <p>Since there’s no column for Surprise_diff, Meaningful_diff, and Interest_diff, I’ll make those below:</p>
@@ -577,13 +571,18 @@ curiosity_diff</code></pre>
   mutate(Surprised_diff = T2_Surprised - T1_Surprised, 
          Meaningful_diff = T2_Meaningful - T1_Meaningful, 
          Interesting_diff = T2_Interesting - T1_Interesting)</code></pre>
-<pre class="r"><code>ci_Surprise_diff &lt;- ci(data_complete$Surprised_diff, confidence = 0.95)
-surprise_diff &lt;- c(round(c(mean(data_complete$Surprised_diff), ci_Surprise_diff[2], ci_Surprise_diff[3]), digits = 2))
+<pre class="r"><code>ci_Surprised_diff &lt;- ci(data_complete$Surprised_diff, confidence = 0.95)
+surprise_diff &lt;- c(round(c(mean(data_complete$Surprised_diff), ci_Surprised_diff[2], ci_Surprised_diff[3]), digits = 2))
 surprise_diff</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     0.40     0.19     0.62</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.40&quot;, obtainedValue = mean(data_complete$Surprised_diff), valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.40', obtainedValue = surprise_diff[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (0.4) and the obtained value (0.4) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.19', obtainedValue = surprise_diff[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.19) and the obtained value (0.19) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.62', obtainedValue = surprise_diff[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.62) and the obtained value (0.62) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Meaningfulness</em></strong></p>
 <pre class="r"><code>ci_meaning_diff &lt;- ci(data_complete$Meaningful_diff, confidence = 0.95)
@@ -591,8 +590,13 @@ meaning_diff &lt;- c(round(c(mean(data_complete$Meaningful_diff), ci_meaning_dif
 meaning_diff</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     0.22     0.03     0.42</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.22&quot;, obtainedValue = mean(data_complete$Meaningful_diff), valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.22', obtainedValue = meaning_diff[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (0.22) and the obtained value (0.22) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.03', obtainedValue = meaning_diff[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.03) and the obtained value (0.03) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.42', obtainedValue = meaning_diff[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.42) and the obtained value (0.42) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest</em></strong></p>
 <pre class="r"><code>ci_interest_diff &lt;- ci(data_complete$Interesting_diff, confidence = 0.95)
@@ -600,8 +604,13 @@ interest_diff &lt;- c(round(c(mean(data_complete$Interesting_diff), ci_interest_
 interest_diff</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     0.23     0.02     0.45</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.23&quot;, obtainedValue = mean(data_complete$Interesting_diff), valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.23', obtainedValue = interest_diff[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (0.23) and the obtained value (0.23) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.02', obtainedValue = interest_diff[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.02) and the obtained value (0.02) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.45', obtainedValue = interest_diff[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.45) and the obtained value (0.45) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 <p><strong><em>Interest (composite)</em></strong></p>
 <pre class="r"><code>ci_interest_comp_diff &lt;- ci(data_complete$Interest_composite_diff, confidence = 0.95)
@@ -609,8 +618,13 @@ interest_comp_diff &lt;- c(round(c(mean(data_complete$Interest_composite_diff), 
 interest_comp_diff</code></pre>
 <pre><code>##          CI lower CI upper 
 ##     0.29     0.10     0.47</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.29&quot;, obtainedValue = mean(data_complete$Interest_composite_diff), valueType = &quot;mean&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.29', obtainedValue = interest_comp_diff[1], valueType = 'mean')</code></pre>
 <pre><code>## [1] &quot;MATCH for mean. The reported value (0.29) and the obtained value (0.29) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.10', obtainedValue = interest_comp_diff[2], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.1) and the obtained value (0.1) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.47', obtainedValue = interest_comp_diff[3], valueType = 'ci')</code></pre>
+<pre><code>## [1] &quot;MATCH for ci. The reported value (0.47) and the obtained value (0.47) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>These values are consistent with the paper.</p>
 </div>
 </div>
@@ -618,6 +632,10 @@ interest_comp_diff</code></pre>
 <h2>Inferential stats</h2>
 <div id="curiosity" class="section level3">
 <h3>Curiosity</h3>
+<p><em>Co-pilot note: Quoting section of Target Outcomes that this portion of the Markdown file seeks to reproduce:</em></p>
+<blockquote>
+<p>Participants’ Time 1 predictions of their curiosity (M = 3.99, SD = 1.32) were lower than their actual curiosity ratings at Time 2, immediately before reading their responses (M = 4.34, SD = 1.25), t(105) = 2.88, p = .005, d = 0.27.</p>
+</blockquote>
 <pre class="r"><code>t_curiosity &lt;- t.test(data_complete$T2_Curious, y = data_complete$T1_Curious, paired = TRUE)
 t_curiosity</code></pre>
 <pre><code>## 
@@ -633,16 +651,25 @@ t_curiosity</code></pre>
 ##                0.348233</code></pre>
 <pre class="r"><code>p_curiosity &lt;- t_curiosity[3] 
 
-reportObject &lt;- reproCheck(reportedValue = &quot;0.005&quot;, obtainedValue = p_curiosity, valueType = &quot;p&quot;)</code></pre>
+# Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.005', obtainedValue = p_curiosity, valueType = 'p')</code></pre>
 <pre><code>## [1] &quot;MATCH for p. The reported value (0.005) and the obtained value (0.005) differed by 0%. Note that the obtained value was rounded to 3 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '2.88', obtainedValue = t_curiosity[1], valueType = 't')</code></pre>
+<pre><code>## [1] &quot;MATCH for t. The reported value (2.88) and the obtained value (2.88) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.35', obtainedValue = t_curiosity[5], valueType = 'mean')</code></pre>
+<pre><code>## [1] &quot;MATCH for mean. The reported value (0.35) and the obtained value (0.35) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>Results are consistent with the paper.</p>
 <pre class="r"><code>d_curious &lt;- (mean_T2_curious - mean_T1_curious)/sd(c(data_complete$T2_Curious, data_complete$T1_Curious)) 
 d_curious</code></pre>
 <pre><code>## [1] 0.2687348</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.27', obtainedValue = d_curious, valueType = 'd')</code></pre>
+<pre><code>## [1] &quot;MATCH for d. The reported value (0.27) and the obtained value (0.27) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>Results are consistent with the paper.</p>
 </div>
 <div id="surprise" class="section level3">
 <h3>Surprise</h3>
+<p><em>Co-pilot note: These analyses were not in the Target Outcomes, but it’s great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.</em></p>
 <pre class="r"><code>t_surprise &lt;- t.test(data_complete$T2_Surprised, y = data_complete$T1_Surprised, paired = TRUE)
 t_surprise</code></pre>
 <pre><code>## 
@@ -657,14 +684,13 @@ t_surprise</code></pre>
 ## mean of the differences 
 ##               0.4045934</code></pre>
 <pre class="r"><code>p_surprise &lt;- t_surprise[3]
-p_surprise</code></pre>
-<pre><code>## $p.value
-## [1] 0.0003701906</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;&lt;0.001&quot;, obtainedValue = &quot;0.0003701906&quot;, valueType = &quot;p&quot;, eyeballCheck = TRUE)</code></pre>
+
+reportObject &lt;- reproCheck(reportedValue = &quot;&lt;0.001&quot;, obtainedValue = &quot;0.0003701906&quot;, valueType = &quot;p&quot;, eyeballCheck = TRUE)</code></pre>
 <pre><code>## [1] &quot;MATCH for p. Eyeball comparison only.&quot;</code></pre>
 </div>
 <div id="meaningfulness" class="section level3">
 <h3>Meaningfulness</h3>
+<p><em>Co-pilot note: These analyses were not in the Target Outcomes, but it’s great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.</em></p>
 <pre class="r"><code>t_meaning &lt;- t.test(data_complete$T2_Meaningful, y = data_complete$T1_Meaningful, paired = TRUE)
 t_meaning</code></pre>
 <pre><code>## 
@@ -686,6 +712,7 @@ reportObject &lt;- reproCheck(reportedValue = &quot;0.02&quot;, obtainedValue = 
 </div>
 <div id="interest" class="section level3">
 <h3>Interest</h3>
+<p><em>Co-pilot note: These analyses were not in the Target Outcomes, but it’s great that the pilot calculated them regardless! Unfortunately, the original authors did not provide t-statistics for these outcomes, so we cannot run a ReproCheck.</em></p>
 <pre class="r"><code>t_interest &lt;- t.test(data_complete$T2_Interesting, y = data_complete$T1_Interesting, paired = TRUE)
 p_interest &lt;- t_interest[3]
 t_interest</code></pre>
@@ -706,6 +733,10 @@ t_interest</code></pre>
 </div>
 <div id="interest-composite" class="section level3">
 <h3>Interest (composite)</h3>
+<p><em>Co-pilot note: Quoting section of Target Outcomes that this portion of the Markdown file seeks to reproduce:</em></p>
+<blockquote>
+<p>Participants also underestimated how interesting they would find their responses. Predictions of interest at Time 1 (M = 3.54, SD = 1.01) were lower than ratings of actual interest experienced at Time 2 (M = 3.82, SD = 0.89), t(105) = 3.10, p = .003, d = 0.29.</p>
+</blockquote>
 <pre class="r"><code>t_interest_comp &lt;- t.test(data_complete$T2_Interest_Composite, y = data_complete$T1_Interest_Composite, paired = TRUE)
 p_interest_comp &lt;- t_interest_comp[3]
 t_interest_comp</code></pre>
@@ -720,19 +751,28 @@ t_interest_comp</code></pre>
 ## sample estimates:
 ## mean of the differences 
 ##                0.286201</code></pre>
-<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = &quot;0.003&quot;, obtainedValue = p_interest_comp, valueType = &quot;p&quot;)</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.003', obtainedValue = p_interest_comp, valueType = 'p')</code></pre>
 <pre><code>## [1] &quot;MATCH for p. The reported value (0.003) and the obtained value (0.003) differed by 0%. Note that the obtained value was rounded to 3 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '3.10', obtainedValue = t_interest_comp[1], valueType = 't')</code></pre>
+<pre><code>## [1] &quot;MATCH for t. The reported value (3.1) and the obtained value (3.1) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
+<pre class="r"><code>reportObject &lt;- reproCheck(reportedValue = '0.29', obtainedValue = t_interest_comp[5], valueType = 'mean')</code></pre>
+<pre><code>## [1] &quot;MATCH for mean. The reported value (0.29) and the obtained value (0.29) differed by 0%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>Results are consistent with the paper.</p>
 <pre class="r"><code>d_interest &lt;- (mean_T2_interest_comp - mean_T1_interest_comp)/sd(c(data_complete$T2_Interest_Composite, data_complete$T1_Interest_Composite)) 
 d_interest</code></pre>
 <pre><code>## [1] 0.2974526</code></pre>
+<pre class="r"><code># Co-pilot note: Adding ReproCheck for the values above!
+reportObject &lt;- reproCheck(reportedValue = '0.29', obtainedValue = d_interest, valueType = 'd')</code></pre>
+<pre><code>## [1] &quot;MINOR_ERROR for d. The reported value (0.29) and the obtained value (0.3) differed by 3.45%. Note that the obtained value was rounded to 2 decimal places to match the reported value.&quot;</code></pre>
 <p>Seems like the paper always rounds up to 2 digits, but here they report d = 0.29, which is not rounding up that would have returned d = 0.30.</p>
+<p><em>Co-pilot note: I (and the ReproCheck) agree with the minor discrepancy that Leili notes above!</em></p>
 </div>
 </div>
 </div>
 <div id="step-5-conclusion" class="section level1">
 <h1>Step 5: Conclusion</h1>
-<p>All results were consistent with the reported findings in the paperexcept for a minor rounding error in effect size. Here’s a table similar to Table 1 in the original paper:</p>
+<p>All results were consistent with the reported findings in the paper except for a minor rounding error in effect size. Here’s a table similar to Table 1 in the original paper:</p>
 <p>“Time 1 95% CI (lower)”, “Time 1 95% CI (higher)”</p>
 <pre class="r"><code>table1 &lt;- matrix(
   c(T1_curiosity, T2_curiosity, curiosity_diff, p_curiosity, 
@@ -1047,7 +1087,6 @@ if(reportType == &quot;copilot&quot;){
 ##  dplyr        * 0.8.3    2019-07-04 [1]
 ##  ellipsis       0.3.0    2019-09-20 [1]
 ##  evaluate       0.14     2019-05-28 [1]
-##  fansi          0.4.0    2018-10-05 [1]
 ##  forcats      * 0.4.0    2019-02-17 [1]
 ##  formattable  * 0.2.0.1  2016-08-05 [1]
 ##  fs             1.3.1    2019-05-06 [1]
@@ -1104,7 +1143,6 @@ if(reportType == &quot;copilot&quot;){
 ##  tidyselect     0.2.5    2018-10-11 [1]
 ##  tidyverse    * 1.2.1    2017-11-14 [1]
 ##  usethis        1.5.1    2019-07-04 [1]
-##  utf8           1.1.4    2018-05-24 [1]
 ##  vctrs          0.2.0    2019-07-05 [1]
 ##  withr          2.1.2    2018-03-15 [1]
 ##  xfun           0.10     2019-10-01 [1]
@@ -1123,7 +1161,6 @@ if(reportType == &quot;copilot&quot;){
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.1)                            
-##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
@@ -1169,7 +1206,6 @@ if(reportType == &quot;copilot&quot;){
 ##  CRAN (R 3.6.0)                            
 ##  Github (TomHardwicke/ReproReports@2ec6f60)
 ##  CRAN (R 3.6.1)                            
-##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
 ##  CRAN (R 3.6.0)                            
